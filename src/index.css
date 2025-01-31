@@ -1,0 +1,40 @@
+
+:root {
+  --color-primary: #49cc68;
+  --color-text-dark: #121212;
+  --color-text-light: #757575;
+  --color-light-blue: #f6f9fc;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: var(--color-text-dark);
+  font-family: sans-serif;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+main {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+h1 {
+  font-size: 2.25rem;
+  margin-bottom: 1.5rem;
+}
+
+p {
+  color: var(--color-text-light);
+  margin-bottom: 1.5rem
+}
+
+.container {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
