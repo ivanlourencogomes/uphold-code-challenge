@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FIAT_CURRENCIES } from "../util/fiatCurrencies";
+import './currencyList.css';
 
 function CurrencyList({ exchangeRates, amount, selectedCurrency }) {
   const [showAll, setShowAll] = useState(false);
@@ -14,10 +15,10 @@ function CurrencyList({ exchangeRates, amount, selectedCurrency }) {
   const displayedCurrencies = showAll ? [...fiatCurrencies, ...nonFiatCurrencies] : fiatCurrencies;
 
   return (
-    <div className="currency-list">
+    <ul className="currency-list">
       {displayedCurrencies.map((rate) => (
-        <div key={rate.pair} className="currency-item">
-          <strong>
+        <li key={rate.pair} className="currency-item">
+          <div className="amount">
 
             {(amount * parseFloat(rate.ask)).toLocaleString('en-US', {
               style: 'decimal',
@@ -25,23 +26,23 @@ function CurrencyList({ exchangeRates, amount, selectedCurrency }) {
               maximumFractionDigits: 8,
             })}
 
-          </strong>
-          <img 
-            src={`https://cdn.uphold.com/assets/${rate.currency}.svg`} 
-            alt={rate.currency} 
-            width="30" 
-            height="30" 
-          />
-          <span>{rate.currency}</span>
-        </div>
+          </div>
+          <div className="currency">
+            <img 
+              src={`https://cdn.uphold.com/assets/${rate.currency}.svg`} 
+              alt={rate.currency}
+            />
+            <span>{rate.currency}</span>
+          </div>
+        </li>
       ))}
 
       {nonFiatCurrencies.length > 0 && (
-        <button onClick={() => setShowAll(prev => !prev)}>
+        <button className="primary" onClick={() => setShowAll(prev => !prev)}>
           {showAll ? "Show Less" : "Show More"}
         </button>
       )}
-    </div>
+    </ul>
   );
 }
 

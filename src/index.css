@@ -1,9 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 :root {
   --color-primary: #49cc68;
+  --color-primary-hover: #329c4a;
   --color-text-dark: #121212;
-  --color-text-light: #757575;
-  --color-light-blue: #f6f9fc;
+  --color-text-grey: #3c4a5b;
+  --color-text-light: #8494a5;
+  --color-light-blue: #f5f9fc;
 }
 
 * {
@@ -11,7 +14,7 @@
   padding: 0;
   box-sizing: border-box;
   color: var(--color-text-dark);
-  font-family: sans-serif;
+  font-family: "Inter", serif;
 }
 
 ul, ol {
@@ -20,21 +23,54 @@ ul, ol {
 
 main {
   text-align: center;
-  padding: 80px 20px;
+  padding: 40px 20px;
+}
+
+header {
+  text-align: center;
+  padding: 30px 0;
 }
 
 h1 {
-  font-size: 2.25rem;
+  font-size: 2.2rem;
   margin-bottom: 1.5rem;
+  font-weight: 600;
 }
 
 p {
   color: var(--color-text-light);
-  margin-bottom: 1.5rem
+  margin-bottom: 3rem;
+  line-height: 1.5rem;
+
+}
+
+.message {
+  color: var(--color-text-light);   
+  font-size: 0.8rem;
+  margin: 20px; 
+}
+
+button {
+  border-radius: 100px;
+  padding: 10px 24px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.5s;
+
+  &.primary {
+    background-color: var(--color-primary);
+    color: white;
+
+    &:hover {
+      background-color: var(--color-primary-hover);
+    }
+  }
 }
 
 .container {
   width: 100%;
-  max-width: 400px;
+  max-width: 450px;
   margin: 0 auto;
 }
+

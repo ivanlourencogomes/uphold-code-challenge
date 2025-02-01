@@ -3,10 +3,11 @@ import { NumericFormat } from 'react-number-format';
 import { FIAT_CURRENCIES } from "../util/fiatCurrencies";
 import { useEffect, useState } from "react";
 import { getCurrencyOptions } from "../util/currencyOptions";
+import './userSelection.css';
 
 function UserSelection({ onSelectionChange }) {
 
-  const [amount, setAmount] = useState(1);
+  const [amount, setAmount] = useState(0);
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
   const [debouncedAmount, setDebouncedAmount] = useState(amount);
 
@@ -26,24 +27,39 @@ function UserSelection({ onSelectionChange }) {
   }, [debouncedAmount, selectedCurrency, onSelectionChange]);
 
   return (
-    <form>
-      <NumericFormat
-        value={amount}
-        onValueChange={(values) => setAmount(parseFloat(values.value.replace(/[^0-9.-]+/g, "")))}
-        thousandSeparator={true}
-        allowNegative={false}
-        decimalScale={2}
-        fixedDecimalScale
-        customInput="input"
-      />
 
-      <Select
-        options={currencyOptions} 
-        defaultValue={defaultCurrency} 
-        onChange={(currency) => setSelectedCurrency(currency.value)}   
-        placeholder="Choose a currency..."
-      />
-    </form>
+    <section className="user-selection">
+      <form>
+        <NumericFormat
+          value={amount}
+          onValueChange={(values) => setAmount(values.value ? parseFloat(values.value.replace(/[^0-9.-]+/g, "")) : 0)}
+          thousandSeparator={true}
+          allowNegative={false}
+          decimalScale={2}
+          fixedDecimalScale
+          customInput="input"
+        />
+
+        <Select
+          options={currencyOptions} 
+          defaultValue={defaultCurrency} 
+          onChange={(currency) => setSelectedCurrency(currency.value)}
+          styles={{
+            control: (baseStyles) => ({
+              ...baseStyles,
+              border: 'none',
+              borderRadius: '100px', 
+              fontSize: '0.7rem',
+              fontWeight: '500'
+            }),
+          }}
+          components={{
+            IndicatorSeparator: () => null
+          }}
+          placeholder="Choose a currency..."
+        />
+      </form>
+    </section>
   );
 }
 

@@ -1,0 +1,19 @@
+section.user-selection {
+    form {
+        padding: 12px 20px;
+        display: flex;
+        justify-content: space-between;
+        background-color: var(--color-light-blue);
+        border-radius: 8px;
+
+        input {
+            color: var(--color-text-grey);
+            border: none;
+            background-color: transparent;
+            font-size: 2rem;
+            flex: 1; 
+            min-width: 100px;
+        }
+
+    }
+}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import UserSelection from "./components/UserSelection"
-import CurrencyList from "./components/CurrencyList"
+import UserSelection from "./components/UserSelection";
+import CurrencyList from "./components/CurrencyList";
+import Header from "./components/Header";
 
 function App() {
 
@@ -33,24 +34,33 @@ function App() {
   }, [selectedCurrency]);
 
   return (
-    <main>
-      
-      <section className="container">
-          <h1>Currency Converter</h1>
-          <p>
-            Receive competitive and transparent pricing
-            with no hidden spreads. See how we compare.
-          </p>
-          <UserSelection onSelectionChange={handleSelectionChange} />
+
+    <>
+      <Header />
+      <main className="container">
+
+        <h1>Currency Converter</h1>
+        <p>
+          Receive competitive and transparent pricing
+          with no hidden spreads. See how we compare.
+        </p>
+        <UserSelection onSelectionChange={handleSelectionChange} />
+        {amount > 0 && exchangeRates && exchangeRates.length > 0 ? (
           <CurrencyList 
             selectedCurrency={selectedCurrency} 
             exchangeRates={exchangeRates} 
             amount={amount} 
             key={selectedCurrency}
           />
-      </section>
+        ) : (
+          <p className="message">
+            Enter an amount to check the rates.
+          </p>
+        )}
 
-    </main>
+      </main>
+    </>
+    
     
   )
 }
