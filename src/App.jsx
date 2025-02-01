@@ -4,22 +4,7 @@ import CurrencyList from "./components/CurrencyList"
 
 function App() {
 
-  const [currencies, setCurrencies] = useState('');
   const [status, setStatus] = useState('idle');
-
-  async function getCurrencies() {
-    try {
-      const response = await fetch('http://localhost:3001/api/assets');
-      const data = await response.json();
-      setCurrencies(data);
-      setStatus('done');
-
-    } catch (error) {
-      setStatus('error');
-      console.log(error);
-    }
-    
-  }
 
   useEffect(() => {
     if (status == 'idle') {

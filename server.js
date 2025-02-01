@@ -11,7 +11,7 @@ app.use(cors({
 
 app.get('/api/assets', async (req, res) => {
     try {
-        const response = await fetch('https://api.uphold.com/v0/assets');
+        const response = await fetch('https://api.uphold.com/v0/ticker/');
         if (!response.ok) {
             throw new Error(`Failed to fetch data: ${response.statusText}`);
         }
