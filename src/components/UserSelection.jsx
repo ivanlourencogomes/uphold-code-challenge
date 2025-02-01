@@ -7,7 +7,7 @@ import './userSelection.css';
 
 function UserSelection({ onSelectionChange }) {
 
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState(1);
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
   const [debouncedAmount, setDebouncedAmount] = useState(amount);
 

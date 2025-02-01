@@ -5,7 +5,7 @@ import Header from "./components/Header";
 
 function App() {
 
-  const [amount, setAmount] = useState(1);
+  const [amount, setAmount] = useState(0);
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
   const [exchangeRates, setExchangeRates] = useState(null);
 
@@ -44,7 +44,9 @@ function App() {
           Receive competitive and transparent pricing
           with no hidden spreads. See how we compare.
         </p>
+        
         <UserSelection onSelectionChange={handleSelectionChange} />
+        
         {amount > 0 && exchangeRates && exchangeRates.length > 0 ? (
           <CurrencyList 
             selectedCurrency={selectedCurrency} 
