@@ -11,9 +11,12 @@ app.use(cors({
 
 app.get("/api/rates/:currency", async (req, res) => {
     const { currency } = req.params;
-  
+
+    const url = currency ?
+      `https://api.uphold.com/v0/ticker/${currency}` :
+      `https://api.uphold.com/v0/ticker/`
     try {
-      const response = await fetch(`https://api.uphold.com/v0/ticker/${currency}`);
+      const response = await fetch(url);
       if (!response.ok) {
         throw new Error("Failed to fetch exchange rates from Uphold");
       }

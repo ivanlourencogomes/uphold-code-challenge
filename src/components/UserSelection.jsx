@@ -1,17 +1,17 @@
 import Select from "react-select";
 import { NumericFormat } from 'react-number-format';
-import { FIAT_CURRENCIES } from "../util/fiatCurrencies";
+import { INITIAL_CURRENCIES } from "../util/initialCurrencies";
 import { useEffect, useState } from "react";
 import { getCurrencyOptions } from "../util/currencyOptions";
 import './userSelection.css';
 
 function UserSelection({ onSelectionChange }) {
 
-  const [amount, setAmount] = useState(1);
+  const [amount, setAmount] = useState(0);
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
   const [debouncedAmount, setDebouncedAmount] = useState(amount);
 
-  const currencyOptions = getCurrencyOptions(FIAT_CURRENCIES);
+  const currencyOptions = getCurrencyOptions(INITIAL_CURRENCIES);
   const defaultCurrency = currencyOptions.find((currency) => currency.value === "USD"); 
 
   useEffect(() => {

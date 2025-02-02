@@ -2,36 +2,74 @@ import { useState, useEffect } from "react";
 import UserSelection from "./components/UserSelection";
 import CurrencyList from "./components/CurrencyList";
 import Header from "./components/Header";
+import { INITIAL_CURRENCIES } from "./util/initialCurrencies";
 
 function App() {
 
   const [amount, setAmount] = useState(0);
   const [selectedCurrency, setSelectedCurrency] = useState("USD");
-  const [exchangeRates, setExchangeRates] = useState(null);
+  const [exchangeRates, setExchangeRates] = useState([]);
+  const [cachedRates, setCachedRates] = useState([]);
 
   const handleSelectionChange = ({ amount, selectedCurrency }) => {
     setAmount(amount);
     setSelectedCurrency(selectedCurrency);
   };
-
+  
   useEffect(() => {
-    setExchangeRates([]);
-    const fetchExchangeRates = async () => {
+    const fetchCachedRates = async () => {
 
-      try {
-        const response = await fetch(`http://localhost:3001/api/rates/${selectedCurrency}`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch exchange rates");
-        }
-        const data = await response.json();
-        setExchangeRates(data);
-      } catch (error) {
+      const ratePromises = INITIAL_CURRENCIES.map(currency => 
+        fetch(`http://localhost:3001/api/rates/${currency}`).then(res => res.json())
+      );
+  
+      Promise.all(ratePromises).then(results => {
+        results.forEach((rateData, index) => {
+          const currency = INITIAL_CURRENCIES[index];
+          
+          if (rateData.currency !== currency) {
+            setCachedRates(prevRates => ({
+              ...prevRates,
+              [currency]: rateData 
+            }));
+          }
+        });
+      }).catch(error => {
         console.error("Error fetching exchange rates:", error);
-      }
+      });
+      
     };
 
-    fetchExchangeRates();
-  }, [selectedCurrency]);
+    fetchCachedRates();
+  }, []);
+
+  useEffect(() => {
+    if (amount > 0) {
+      setExchangeRates([]);
+      const fetchExchangeRates = async () => {
+  
+        try {
+          const response = await fetch(`http://localhost:3001/api/rates/${selectedCurrency}`);
+          if (!response.ok) {
+            throw new Error("Failed to fetch exchange rates");
+          }
+          const data = await response.json();
+          setExchangeRates(data);
+          
+          setCachedRates(prevRates => ({
+            ...prevRates,
+            [selectedCurrency]: data
+          }));
+
+        } catch (error) {
+          console.error("Error fetching exchange rates:", error);
+        }
+      };
+  
+      fetchExchangeRates();
+
+    }
+  }, [selectedCurrency, amount]);
 
   return (
 
@@ -47,10 +85,11 @@ function App() {
         
         <UserSelection onSelectionChange={handleSelectionChange} />
         
-        {amount > 0 && exchangeRates && exchangeRates.length > 0 ? (
+        {amount > 0 && cachedRates[selectedCurrency] && cachedRates[selectedCurrency].length ? (
           <CurrencyList 
             selectedCurrency={selectedCurrency} 
             exchangeRates={exchangeRates} 
+            cachedRates={cachedRates}
             amount={amount} 
             key={selectedCurrency}
           />

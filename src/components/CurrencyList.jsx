@@ -1,27 +1,31 @@
 import { useState } from "react";
-import { FIAT_CURRENCIES } from "../util/fiatCurrencies";
+import { INITIAL_CURRENCIES } from "../util/initialCurrencies";
 import SearchBox from "./SearchBox";
 import "./currencyList.css";
 
-function CurrencyList({ exchangeRates, amount, selectedCurrency }) {
+function CurrencyList({ exchangeRates, cachedRates, amount, selectedCurrency }) {
   const [showAll, setShowAll] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(""); // Search term state
+  const [searchQuery, setSearchQuery] = useState("");
 
-  if (!exchangeRates) {
+  if (!cachedRates && !cachedRates.length) {
     return <p>Loading exchange rates...</p>;
   }
+  
+  const rates = exchangeRates && exchangeRates.length ? exchangeRates : cachedRates[selectedCurrency];
+  
+  const filteredRates = rates.filter(rate => rate.currency !== selectedCurrency);
+  const initialCurrencies = filteredRates.filter(rate => INITIAL_CURRENCIES.includes(rate.currency));
+  const additionalCurrencies = filteredRates.filter(rate => !INITIAL_CURRENCIES.includes(rate.currency));
 
-  const filteredRates = exchangeRates.filter(rate => rate.currency !== selectedCurrency);
-  const fiatCurrencies = filteredRates.filter(rate => FIAT_CURRENCIES.includes(rate.currency));
-  const nonFiatCurrencies = filteredRates.filter(rate => !FIAT_CURRENCIES.includes(rate.currency));
-
-  const allCurrencies = [...fiatCurrencies, ...nonFiatCurrencies];
+  const allCurrencies = [...initialCurrencies, ...additionalCurrencies];
   
   const displayedCurrencies = searchQuery
     ? allCurrencies.filter(rate => rate.currency.toLowerCase().includes(searchQuery.toLowerCase()))
     : showAll
     ? allCurrencies
-    : fiatCurrencies;
+    : initialCurrencies;
+
+
 
   return (
     <>
@@ -48,7 +52,7 @@ function CurrencyList({ exchangeRates, amount, selectedCurrency }) {
         ))}
       </ul>
 
-      {!searchQuery && nonFiatCurrencies.length > 0 && (
+      {!searchQuery && additionalCurrencies.length > 0 && (
         <button className="primary" onClick={() => setShowAll(prev => !prev)}>
           {showAll ? "Show Less" : "Show More"}
         </button>
