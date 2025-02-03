@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { INITIAL_CURRENCIES } from "../util/initialCurrencies";
+import useCurrencyList from "../hooks/useCurrencyList";
 import SearchBox from "./SearchBox";
 import "./currencyList.css";
 
@@ -11,21 +11,13 @@ function CurrencyList({ exchangeRates, cachedRates, amount, selectedCurrency }) 
     return <p>Loading exchange rates...</p>;
   }
   
-  const rates = exchangeRates && exchangeRates.length ? exchangeRates : cachedRates[selectedCurrency];
-  
-  const filteredRates = rates.filter(rate => rate.currency !== selectedCurrency);
-  const initialCurrencies = filteredRates.filter(rate => INITIAL_CURRENCIES.includes(rate.currency));
-  const additionalCurrencies = filteredRates.filter(rate => !INITIAL_CURRENCIES.includes(rate.currency));
-
-  const allCurrencies = [...initialCurrencies, ...additionalCurrencies];
-  
-  const displayedCurrencies = searchQuery
-    ? allCurrencies.filter(rate => rate.currency.toLowerCase().includes(searchQuery.toLowerCase()))
-    : showAll
-    ? allCurrencies
-    : initialCurrencies;
-
-
+  const { displayedCurrencies, additionalCurrencies } = useCurrencyList({
+    exchangeRates, 
+    cachedRates, 
+    selectedCurrency, 
+    searchQuery, 
+    showAll
+  });
 
   return (
     <>

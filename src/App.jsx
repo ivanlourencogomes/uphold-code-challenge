@@ -28,17 +28,21 @@ function App() {
       );
   
       await Promise.all(ratePromises).then(results => {
+        const updatedRates = {};
         results.forEach((rateData, index) => {
           const currency = INITIAL_CURRENCIES[index];
-          
+      
           if (rateData.currency !== currency) {
-            setCachedRates(prevRates => ({
-              ...prevRates,
-              [currency]: rateData 
-            }));
+            updatedRates[currency] = rateData;
           }
         });
-      })
+      
+        setCachedRates(prevRates => ({
+          ...prevRates,
+          ...updatedRates
+        }));
+      });
+      
     } catch (error) {
       setError(true);
     } finally {
